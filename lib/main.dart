@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:toss03/home.dart';
+import 'songeumpage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,54 +14,50 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    void _onItemTapped(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.grey),
-      home: Scaffold(
-        appBar: appbarhome,
-        body: SafeArea(
-          child: ListView(
-            children: <Widget>[
-              // List> ()
-              Padding(
-                padding: EdgeInsets.all(25),
-                child: Container(
-                  child: ListTile(
-                    title: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 20, 0, 3),
-                      child: Text(
-                        "토스뱅크",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                  ),
-                  width: 343,
-                  height: 72, //72,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primaryColor: Colors.grey),
+        home: Scaffold(
+            body: bodypage[_selectedIndex],
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: '홈',
                 ),
-              ),
-              Card(
-                child: Column(
-                  children: [
-                    for (int i = 0; i < 6; i++) ...{
-                      money(
-                          textbank[i], textmoney[i], imagemoney[i], songeum[0])
-                    }
-                  ],
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/images/tack.png')),
+                  label: '혜택',
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/images/geum.png')),
+                  label: '송금',
+                ),
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/images/jojo.png')),
+                  label: '주식',
+                ),
+                BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/images/all.png')),
+                  label: '전체',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              selectedItemColor: const Color(0xFF2196F3),
+              unselectedItemColor: const Color(0xFF949090),
+            ),
+            appBar: _selectedIndex != 2 ? appbarhome : null));
   }
 
   PreferredSizeWidget appbarhome = AppBar(
@@ -85,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                 top: 15,
                 right: 15,
                 child: Container(
-                  child: Text(
+                  child: const Text(
                     '9+',
                     style: TextStyle(fontSize: 11),
                   ),
@@ -95,7 +93,7 @@ class _MyAppState extends State<MyApp> {
           ),
           IconButton(
               iconSize: 30,
-              color: Color(0xffB1B8C0),
+              color: const Color(0xffB1B8C0),
               icon: const Icon(Icons.chat_bubble),
               onPressed: () {}),
         ],
@@ -104,56 +102,10 @@ class _MyAppState extends State<MyApp> {
   );
 }
 
-List<String> imagemoney = [
-  'assets/images/toss.png',
-  'assets/images/uri.png',
-  'assets/images/ibk.png',
-  'assets/images/kakao.png',
-  'assets/images/hana.png',
-  'assets/images/uri.png',
-  'assets/images/toss.png',
+List bodypage = [
+  const Home(),
+  const Home(),
+  const Songgeum(),
+  const Home(),
+  const Home(),
 ];
-List<String> textbank = [
-  '토스뱅크 통장',
-  '우리뱅크월렛카카오통장' '\n' '(저축예금)',
-  '보통예금(IBK평생한가족통장',
-  '입출금통장',
-  '영하나플러스 통장',
-  '저축 우리청년희망 적금',
-];
-List<String> textmoney = [
-  '16,735원',
-  '74,000원',
-  '0원',
-  '0원',
-  '12,210원',
-  '2,500,000원',
-  '16,735',
-];
-
-List<String> songeum = [
-  'assets/images/songeum.png',
-];
-
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
-
-  @override
-  State<MyWidget> createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends State<MyWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-Widget money(String a, String b, String c, String d) {
-  return ListTile(
-    leading: Image(image: AssetImage(c[1])),
-    title: Text(a[1]),
-    subtitle: Text(b[1]),
-    trailing: Image(image: AssetImage(d[1])),
-  );
-}
